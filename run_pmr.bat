@@ -1,40 +1,32 @@
 @echo off
-REM =================================================
-REM UK PMR446 Scanner launcher (Radioconda)
-REM Portable for any Windows user
-REM =================================================
+SETLOCAL
 
 SET ENV_NAME=pmr
 SET PROJECT_DIR=%~dp0
-SET RADIOCONDA_SCRIPTS=%USERPROFILE%\radioconda\Scripts
+SET ACTIVATE_BAT=%USERPROFILE%\radioconda\Scripts\activate.bat
 
-REM Check Radioconda exists
-IF NOT EXIST "%RADIOCONDA_SCRIPTS%\activate.bat" (
-    echo ERROR: Radioconda not found at:
-    echo %RADIOCONDA_SCRIPTS%
-    echo.
-    echo Please install Radioconda or adjust your PATH.
-    pause
-    exit /b 1
+IF NOT EXIST "%ACTIVATE_BAT%" (
+  echo ERROR: Could not find Radioconda activate.bat at:
+  echo   %ACTIVATE_BAT%
+  echo.
+  echo Install Radioconda to: %USERPROFILE%\radioconda  (default)
+  pause
+  exit /b 1
 )
 
-REM Go to Radioconda Scripts
-cd /d "%RADIOCONDA_SCRIPTS%"
-
-REM Activate environment
-CALL activate.bat %ENV_NAME%
+REM Activate environment (this runs conda.bat internally)
+CALL "%ACTIVATE_BAT%" %ENV_NAME%
 IF ERRORLEVEL 1 (
-    echo ERROR: Failed to activate Conda environment "%ENV_NAME%"
-    echo Make sure it exists:
-    echo   conda create -n %ENV_NAME% python=3.11
-    pause
-    exit /b 1
+  echo ERROR: Failed to activate environment "%ENV_NAME%".
+  echo If you haven't created it yet, run:
+  echo   conda create -n %ENV_NAME% python=3.11
+  pause
+  exit /b 1
 )
 
-REM Return to project directory
+REM Run from the repo folder
 cd /d "%PROJECT_DIR%"
-
-REM Run application
 python pmr_monitor.py
 
 pause
+ENDLOCAL
