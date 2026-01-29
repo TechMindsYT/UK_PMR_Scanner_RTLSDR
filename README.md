@@ -3,6 +3,7 @@
 
 A Python + GNU Radio application for monitoring **all 16 UK PMR446 channels simultaneously** using an **RTL-SDR Blog V3** on **Windows 11**.
 
+![Screenshot](screenshots/main_ui.png)
 
 ---
 
