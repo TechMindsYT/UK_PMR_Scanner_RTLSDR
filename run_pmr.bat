@@ -3,28 +3,23 @@ SETLOCAL
 
 SET ENV_NAME=pmr
 SET PROJECT_DIR=%~dp0
-SET ACTIVATE_BAT=%USERPROFILE%\radioconda\Scripts\activate.bat
+SET RADIO_SCRIPTS=%USERPROFILE%\radioconda\Scripts
 
-IF NOT EXIST "%ACTIVATE_BAT%" (
-  echo ERROR: Could not find Radioconda activate.bat at:
-  echo   %ACTIVATE_BAT%
-  echo.
-  echo Install Radioconda to: %USERPROFILE%\radioconda  (default)
+IF NOT EXIST "%RADIO_SCRIPTS%\activate.bat" (
+  echo ERROR: Radioconda Scripts not found:
+  echo   %RADIO_SCRIPTS%
   pause
   exit /b 1
 )
 
-REM Activate environment (this runs conda.bat internally)
-CALL "%ACTIVATE_BAT%" %ENV_NAME%
+cd /d "%RADIO_SCRIPTS%"
+CALL activate.bat %ENV_NAME%
 IF ERRORLEVEL 1 (
-  echo ERROR: Failed to activate environment "%ENV_NAME%".
-  echo If you haven't created it yet, run:
-  echo   conda create -n %ENV_NAME% python=3.11
+  echo ERROR: Failed to activate "%ENV_NAME%".
   pause
   exit /b 1
 )
 
-REM Run from the repo folder
 cd /d "%PROJECT_DIR%"
 python pmr_monitor.py
 
