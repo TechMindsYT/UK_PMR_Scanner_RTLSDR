@@ -1,7 +1,7 @@
 @echo off
 SETLOCAL
 
-SET ENV_NAME=pmr
+SET ENV_NAME=base
 SET PROJECT_DIR=%~dp0
 SET RADIO_SCRIPTS=%USERPROFILE%\radioconda\Scripts
 
