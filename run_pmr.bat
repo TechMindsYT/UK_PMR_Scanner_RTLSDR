@@ -1,12 +1,13 @@
+
 @echo off
 REM =================================================
-REM UK PMR446 Scanner launcher (portable)
+REM UK PMR446 Scanner launcher (portable, Windows)
 REM Requires Conda (Anaconda / Miniconda / Radioconda)
 REM =================================================
 
 SET ENV_NAME=pmr
 
-REM Check conda is available
+REM Locate conda.bat
 where conda >nul 2>nul
 IF ERRORLEVEL 1 (
     echo ERROR: Conda not found in PATH.
@@ -15,8 +16,11 @@ IF ERRORLEVEL 1 (
     exit /b 1
 )
 
-REM Activate environment
-CALL conda activate %ENV_NAME%
+REM Get conda base path
+FOR /F "delims=" %%i IN ('conda info --base') DO SET CONDA_BASE=%%i
+
+REM Activate environment using conda.bat (THIS IS THE KEY)
+CALL "%CONDA_BASE%\Scripts\activate.bat" %ENV_NAME%
 IF ERRORLEVEL 1 (
     echo ERROR: Failed to activate Conda environment "%ENV_NAME%".
     echo Make sure it exists by running:
@@ -25,7 +29,7 @@ IF ERRORLEVEL 1 (
     exit /b 1
 )
 
-REM Run application
+REM Run application using env python
 python "%~dp0pmr_monitor.py"
 
 pause
