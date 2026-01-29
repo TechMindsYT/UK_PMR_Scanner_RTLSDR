@@ -203,12 +203,6 @@ python -c "from gnuradio import gr; print('OK')"
 
 ---
 
-## 📜 License
-
-MIT License
-
----
-
 ## 🙌 Acknowledgements
 
 - GNU Radio Project
