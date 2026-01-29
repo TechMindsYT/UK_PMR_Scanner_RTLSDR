@@ -3,16 +3,19 @@
 
 A Python + GNU Radio application for monitoring **all 16 UK PMR446 channels simultaneously** using an **RTL-SDR Blog V3** on **Windows 11**.
 
+
 ---
 
 ## ⚠️ Important Notes (Please Read First)
 
 - This application **requires GNU Radio** and **cannot be bundled into a single EXE on Windows**
-- It runs from **Python inside a Conda environment**
-- This is normal and expected for SDR applications on Windows
+- It runs from **Python inside Radioconda / Conda**
+- **GNU Radio is expected to be installed in the Radioconda `base` environment**
+- This is intentional and avoids many Windows-specific issues with SDR tooling
 - Tested with:
   - **Windows 11**
   - **RTL-SDR Blog V3**
+  - **Radioconda**
   - **Python 3.11**
   - **GNU Radio (conda-forge)**
 
@@ -43,15 +46,16 @@ A Python + GNU Radio application for monitoring **all 16 UK PMR446 channels simu
 
 ---
 
-### 2️⃣ Install Anaconda (Python Environment Manager)
+### 2️⃣ Install Radioconda (Recommended)
 
-Download and install **Anaconda (64-bit)**:
+Radioconda is a Conda distribution tailored for SDR use on Windows.
 
-https://www.anaconda.com/products/distribution
+Download and install Radioconda:
+https://github.com/ryanvolz/radioconda
 
-During install:
-- ✔ Add Anaconda to PATH (recommended)
-- ✔ Use default options
+Install using default options.
+
+⚠️ **Important:** GNU Radio will be installed into the **`base` environment**.
 
 Restart your PC after installation.
 
@@ -59,39 +63,23 @@ Restart your PC after installation.
 
 ## 🧪 Environment Setup (One-Time)
 
-### 3️⃣ Open **Anaconda Prompt**
+### 3️⃣ Open **Radioconda Prompt**
 
-From Start Menu:
+From the Start Menu:
 ```
-Anaconda Prompt
-```
-
----
-
-### 4️⃣ Create a dedicated environment (Python 3.11)
-
-```
-conda create -n pmr python=3.11
-conda activate pmr
+Radioconda Prompt
 ```
 
-You should now see:
+You should see:
 ```
-(pmr)
+(base)
 ```
 
 ---
 
-### 5️⃣ Enable conda-forge (required)
+### 4️⃣ Install GNU Radio (base environment)
 
-```
-conda config --add channels conda-forge
-conda config --set channel_priority strict
-```
-
----
-
-### 6️⃣ Install GNU Radio
+Make sure you are in the `base` environment, then run:
 
 ```
 conda install gnuradio
@@ -99,9 +87,17 @@ conda install gnuradio
 
 ⏳ This can take several minutes — this is normal.
 
+Verify installation:
+
+```
+python -c "from gnuradio import gr; print('GNU Radio OK')"
+```
+
 ---
 
-### 7️⃣ Install Python dependencies
+### 5️⃣ Install Python dependencies
+
+Still in the `base` environment:
 
 ```
 pip install numpy pyqt5
@@ -111,7 +107,7 @@ pip install numpy pyqt5
 
 ## 📂 Application Setup
 
-### 8️⃣ Clone this repository
+### 6️⃣ Clone this repository
 
 ```
 git clone https://github.com/TechMindsYT/UK_PMR_Scanner_RTLSDR.git
@@ -124,25 +120,28 @@ Or download the ZIP from GitHub and extract it.
 
 ## ▶️ Running the Application
 
-### Option A — Using the batch file (recommended)
+### Recommended method (batch file)
 
-A helper script is included to make running the app easier.
+A helper launcher script is provided.
 
 1. Double-click:
 ```
 run_pmr.bat
 ```
 
-The script will:
-- Activate the `pmr` Conda environment
-- Launch `pmr_monitor.py`
+What the script does:
+- Uses the **Radioconda base environment**
+- Activates GNU Radio correctly
+- Launches `pmr_monitor.py`
+
+No manual Conda activation is required.
 
 ---
 
-### Option B — Manual start
+### Manual method (advanced users)
 
 ```
-conda activate pmr
+conda activate base
 python pmr_monitor.py
 ```
 
@@ -168,12 +167,10 @@ python pmr_monitor.py
 ## 🔧 Troubleshooting
 
 ### ❌ “No module named gnuradio”
-Make sure:
-- You are using **Anaconda Prompt**
-- `(pmr)` is visible in the prompt
-- GNU Radio was installed successfully
+- Ensure you are using **Radioconda**
+- Ensure GNU Radio is installed in the **base** environment
+- Verify with:
 
-Check with:
 ```
 python -c "from gnuradio import gr; print('OK')"
 ```
@@ -198,8 +195,10 @@ python -c "from gnuradio import gr; print('OK')"
 ## 📝 Notes on Windows & SDR
 
 - GNU Radio on Windows **cannot be packaged into a single EXE**
-- This project intentionally runs from source for stability
-- This is the same approach used by many SDR research tools
+- Using the **base environment is intentional and recommended**
+- This avoids DLL and PATH issues common with SDR projects
+
+
 
 ---
 
@@ -207,4 +206,5 @@ python -c "from gnuradio import gr; print('OK')"
 
 - GNU Radio Project
 - RTL-SDR Blog
+- Radioconda
 - Conda-Forge community
